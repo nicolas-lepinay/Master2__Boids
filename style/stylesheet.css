@@ -1,0 +1,71 @@
+body {
+    margin: 0;
+    background: #282c34;
+    overflow: hidden;
+    font-family: sans-serif;
+  }
+
+  /* Le bouton hamburger en haut à gauche */
+  #hamburgerBtn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: none;
+    color: white;
+    font-size: 28px;
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+  }
+
+  /* La barre latérale (fermée par défaut) */
+  #sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    transform: translateX(-220px); /* caché à gauche */
+    transition: transform 0.3s ease;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 998; /* en dessous du hamburger pour le reclic */
+  }
+
+  /* Classe "open" pour afficher la sidebar */
+  #sidebar.open {
+    transform: translateX(0);
+  }
+
+  #sidebar > h2 {
+    padding-top: 20px;
+  }
+
+  .slider-label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .slider-label input {
+    width: 100%;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }
+
+  #resetBtn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  /* Le canvas */
+  #boids {
+    display: block;
+  }

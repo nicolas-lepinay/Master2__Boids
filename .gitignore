@@ -1,0 +1,30 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Node modules
+node_modules/
+
+# Dossier de sortie TypeScript
+dist/
+
+# TypeScript cache
+.tsbuildinfo
+
+# Systèmes d'exploitation
+.DS_Store
+Thumbs.db
+
+# Éditeurs ou IDE
+.vscode/
+.idea/
+*.swp
+
+# En cas de tests unitaires, ignorer la couverture
+coverage/
+
+# Éventuels secrets ou variables d'environnement
+.env
+.env.local
+.env.*.local

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES6",            // ou "ES2019", "ES2020" selon ce que tu préfères
+    "module": "ES6",            // ou "ES2020", "commonjs", etc.
+    "outDir": "./dist",         // où générer les fichiers JS
+    "rootDir": "./src",         // où se trouvent les .ts
+    "strict": true,             // active toutes les vérifications strictes
+    "esModuleInterop": true,    // simplifie l'import de modules CommonJS
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
