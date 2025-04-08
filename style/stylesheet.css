@@ -1,63 +1,63 @@
+/* ----------------------------------------
+   1) Reset / racine
+----------------------------------------- */
 :root {
-    --slider-height: 100%;
     --slider-height: 10px;
   }
-
-/* Corps de la page : un léger dégradé pour donner une teinte nocturne */
-body {
+  
+  /* Corps de la page : un léger dégradé nocturne */
+  body {
     margin: 0;
     padding: 0;
     background: linear-gradient(#1A2735, #090A0F 90%);
     overflow: hidden; 
-    position: relative; /* Permet d'utiliser des pseudo-éléments en fond */
-    color: #fff; /* Si tu veux du texte en blanc par-dessus */
-    min-height: 100vh; /* S’assure que le body occupe tout l’écran */
-    font-family: 'Inter';
+    position: relative; 
+    color: #fff;
+    min-height: 100vh; 
+    font-family: 'Inter', sans-serif;
   }
   
-  /* Deux pseudo-éléments :
-     - ::before : des étoiles fixes
-     - ::after : un calque qui “scintille” lentement
-  */
+  /* 2 pseudo-éléments pour l’effet d’étoiles */
   body::before,
   body::after {
     content: "";
     position: fixed; 
     top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 0; /* Derrière tout le reste */
-    pointer-events: none; /* Inutile d'interagir */
+    z-index: 0; 
+    pointer-events: none; 
     display: block;
   }
   
+  /* Etoiles statiques (motif + halo radial) */
   body::before {
-    /* en plus du motif d’étoiles existant si tu veux */
     background: 
       radial-gradient(circle at 30% 20%, rgba(255, 255, 200, 0.2), transparent 70%),
       url('star.png') repeat top center;
   }
   
-  
-  /* Calque “twinkling” (qui se déplace très doucement) */
+  /* Etoiles “twinkling” animées (lent déplacement) */
   body::after {
     background: url('https://i.imgur.com/YKY28eT.png') repeat top center;
     opacity: 0.5;
     animation: moveTwink 200s linear infinite;
   }
   
-  /* Animation qui déplace lentement la couche “twinkling”
-     pour donner un léger effet de scintillement/défilement */
   @keyframes moveTwink {
-    from { background-position: 0 0; }
-    to   { background-position: -10000px 5000px; }
+    from   { background-position: 0 0; }
+    to     { background-position: -10000px 5000px; }
   }
   
+  /* Le canvas */
   #boids {
     position: relative;
     z-index: 10;
     display: block;
   }
-
-  /* Le bouton hamburger en haut à gauche */
+  
+  /* ----------------------------------------
+     2) Hamburger + sidebar
+  ----------------------------------------- */
+  .hamburger-button,
   #hamburgerBtn {
     position: absolute;
     top: 10px;
@@ -69,46 +69,102 @@ body {
     cursor: pointer;
     z-index: 999;
   }
-
-  /* La barre latérale (fermée par défaut) */
+  
+  .sidebar,
   #sidebar {
     position: absolute;
     top: 0;
     left: 0;
     width: 230px;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.3);
+    /*background: rgba(0, 0, 0, 0.3);*/
     color: white;
-    transform: translateX(-230px); /* caché à gauche */
+    transform: translateX(-230px); 
     transition: transform 0.3s ease;
     padding: 20px;
     box-sizing: border-box;
-    z-index: 998; /* en dessous du hamburger pour le reclic */
+    z-index: 998;
     overflow-y: auto;
   }
-
-  /* Classe "open" pour afficher la sidebar */
+  
+  /* Quand la sidebar a la classe "open", elle est visible */
+  .sidebar.open,
   #sidebar.open {
     transform: translateX(0);
   }
-
+  
   #sidebar > h2 {
-    padding-top: 20px;
+    padding-top: 40px;
+    margin-top: 0;
   }
-
+  
+  /* ----------------------------------------
+     3) Accordéon
+  ----------------------------------------- */
+  .accordion {
+    margin-top: 10px;
+  }
+  
+  /* Chaque section de l’accordéon */
+  .accordion-section {
+    border: 1px solid #444;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  /* On masque le checkbox contrôleur */
+  .accordion-section .accordion-toggle {
+    display: none;
+  }
+  
+  /* Le titre (h3) qui agit comme un bouton */
+  .accordion-section h3 {
+    margin: 0;
+    background: #44444460;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  /* Au survol, on change légèrement la couleur */
+  .accordion-section h3:hover {
+    background: #66666660;
+  }
+  
+  .accordion-label {
+    display: inline-block;
+    width: 100%;
+    color: #fff;
+  }
+  
+  /* Le contenu (caché par défaut) */
+  .accordion-section .accordion-content {
+    display: none;
+    padding: 10px;
+    background: #333;
+  }
+  
+  /* Quand le checkbox est coché, on montre le contenu */
+  .accordion-section .accordion-toggle:checked ~ .accordion-content {
+    display: block;
+  }
+  
+  /* ----------------------------------------
+     4) Sliders, labels, boutons
+  ----------------------------------------- */
   .slider-label {
     display: block;
     font-size: 13px;
     margin-bottom: 8px;
   }
-
-  .slider-label input {
+  
+  .slider-label input[type="range"] {
     margin-bottom: 12px;
     width: 100%;
   }
-
+  
   .btn {
-    background-color: #4F42D8;
+    background-color: rgba(0, 0, 0, 0.3);
     border: none;
     border-radius: 20px;
     color: #FFFFFF;
@@ -116,24 +172,28 @@ body {
     font-size: 11px;
     letter-spacing: 10%;
     margin: 10px 0 10px 0;
-    padding: 15px 30px;
+    padding: 12px;
     text-transform: uppercase;
     width: 100%;
   }
-
-  .btn#resetBtn {
-    background-color: #8ab661;
-    margin: 25px 0 10px 0;
+  
+  .btn.btn-reset {
+    background-color: rgba(0, 0, 0, 0.3);
+    margin: 30px 0 10px 0;
   }
 
   #trailCheckbox {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
+  
+  /* La div .sliderLength n’apparaît que si la checkbox #trailCheckbox est cochée */
 
-  #trailCheckbox:checked ~ .sliderLength  {
-    display: block;
-  }
-
-  .sliderLength  {
+  /*
+  .sliderLength {
     display: none;
   }
+  
+  #trailCheckbox:checked ~ .sliderLength {
+    display: block;
+  }
+  */

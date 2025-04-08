@@ -2,79 +2,125 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Boids TypeScript</title>
+    <title>Aliens vs. Satellites</title>
+
+    <!-- Ton CSS principal -->
     <link rel="stylesheet" href="./style/stylesheet.css">
+
+    <!-- Police Inter depuis Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
   </head>
+
   <body>
     <!-- Le canvas pour dessiner les boids -->
     <canvas id="boids"></canvas>
 
     <!-- Bouton hamburger -->
-    <button id="hamburgerBtn">☰</button>
+    <button id="hamburgerBtn" class="hamburger-button">☰</button>
 
-    <!-- Barre latérale avec sliders et boutons -->
-    <div id="sidebar">
+    <!-- Barre latérale avec un accordéon -->
+    <div id="sidebar" class="sidebar">
       <h2>Paramètres</h2>
 
-      <label class="slider-label">
-        Centrage :
-        <input id="cohesionSlider" type="range" min="0" max="0.02" step="0.001" value="0.005"/>
-      </label>
+      <div class="accordion">
+        <!-- SECTION 1 : MODES -->
+        <section class="accordion-section">
+            <input type="checkbox" id="accModes" class="accordion-toggle" />
+            <h3>
+                <label for="accModes" class="accordion-label">Modes</label>
+            </h3>
+            <div class="accordion-content">
+                <button id="modeDefaultBtn" class="btn">Mode par défaut</button>
+                <button id="modePredatorBtn" class="btn">👽&nbsp;&nbsp;Mode Prédateur</button>
+                <button id="modeFollowMouseBtn" class="btn">🧲&nbsp;&nbsp;Mode Magnétique</button>
+            </div>
+        </section>
 
-      <label class="slider-label">
-        Évitement :
-        <input id="separationSlider" type="range" min="0" max="0.2" step="0.01" value="0.05"/>
-      </label>
+        <!-- SECTION 2 : FLOCKING -->
+        <section class="accordion-section">
+          <!-- Le checkbox qui contrôle l'ouverture de la section -->
+          <input type="checkbox" id="accFlocking" class="accordion-toggle" />
+          <!-- L'en-tête cliquable -->
+          <h3>
+            <label for="accFlocking" class="accordion-label">Flocking</label>
+          </h3>
+          <!-- Le contenu -->
+          <div class="accordion-content">
+            <label class="slider-label">
+              Centrage :
+              <input id="cohesionSlider" type="range" min="0" max="0.02" step="0.001" value="0.005"/>
+            </label>
 
-      <label class="slider-label">
-        Alignement directionnel :
-        <input id="alignmentSlider" type="range" min="0" max="0.2" step="0.01" value="0.05"/>
-      </label>
+            <label class="slider-label">
+              Évitement :
+              <input id="separationSlider" type="range" min="0" max="0.2" step="0.01" value="0.05"/>
+            </label>
 
-      <label class="slider-label">
-        Portée visuelle :
-        <input id="rangeSlider" type="range" min="20" max="700" step="5" value="75"/>
-      </label>
+            <label class="slider-label">
+              Alignement :
+              <input id="alignmentSlider" type="range" min="0" max="0.2" step="0.01" value="0.05"/>
+            </label>
 
-      <label class="slider-label">
-        Virage :
-        <input id="turnSlider" type="range" min="1" max="10" step="1" value="1"/>
-      </label>
+            <label class="slider-label">
+              Portée visuelle :
+              <input id="rangeSlider" type="range" min="20" max="700" step="5" value="75"/>
+            </label>
 
-      <label class="slider-label">
-        Vitesse :
-        <input id="speedSlider" type="range" min="5" max="30" step="1" value="15"/>
-      </label>
+            <label class="slider-label">
+              Virage :
+              <input id="turnSlider" type="range" min="1" max="10" step="1" value="1"/>
+            </label>
 
-      <label class="slider-label">
-        Vitesse du prédateur :
-        <input id="predatorSpeedSlider" type="range" min="5" max="30" step="1" value="15" />
-      </label>
+            <label class="slider-label">
+              Vitesse :
+              <input id="speedSlider" type="range" min="5" max="30" step="1" value="15"/>
+            </label>
+          </div>
+        </section>
 
-      <label class="slider-label">
-        Agressivité du prédateur :
-        <input id="predatorChaseFactorSlider" type="range" min="0" max="0.5" step="0.01" value="0.02" />
-      </label>
+        <!-- SECTION 2 : PREDATEUR -->
+        <section class="accordion-section">
+          <input type="checkbox" id="accPredator" class="accordion-toggle" />
+          <h3>
+            <label for="accPredator" class="accordion-label">Prédateur</label>
+          </h3>
+          <div class="accordion-content">
+            <label class="slider-label">
+              Vitesse du prédateur :
+              <input id="predatorSpeedSlider" type="range" min="5" max="30" step="1" value="15" />
+            </label>
 
-      <div>
-        <input id="trailCheckbox" type="checkbox"/>
-        <label for="trailCheckbox">&nbsp; Afficher la traînée</label>
+            <label class="slider-label">
+              Agressivité du prédateur :
+              <input id="predatorChaseFactorSlider" type="range" min="0" max="0.5" step="0.01" value="0.02" />
+            </label>
+          </div>
+        </section>
 
-        <label class="slider-label sliderLength ">
-            Longueur de la traînée :
-            <input id="trailLengthSlider" type="range" min="5" max="500" step="5" value="50"/>
-        </label>
-      </div>
+        <!-- SECTION 3 : TRAINEE -->
+        <section class="accordion-section">
+          <input type="checkbox" id="accTrail" class="accordion-toggle" />
+          <h3>
+            <label for="accTrail" class="accordion-label">Traînée</label>
+          </h3>
+          <div class="accordion-content">
+            <div>
+              <input id="trailCheckbox" type="checkbox"/>
+              <label for="trailCheckbox">Afficher la traînée</label>
+            </div>
 
-      <button id="resetBtn" class="btn">RESET</button>
-      <button id="modeDefaultBtn" class="btn">Mode par défaut</button>
-      <button id="modePredatorBtn" class="btn">Mode Prédateur</button>
-      <button id="modeFollowMouseBtn" class="btn">Mode Magnétique</button>
-    </div>
+            <label class="slider-label sliderLength">
+              Longueur de la traînée :
+              <input id="trailLengthSlider" type="range" min="5" max="500" step="5" value="50"/>
+            </label>
+          </div>
+        </section>
+      </div> <!-- Fin .accordion -->
+      <button id="resetBtn" class="btn btn-reset">RESET</button>
+    </div> <!-- Fin #sidebar -->
+
     <!-- Charge le code TypeScript compilé -->
     <script type="module" src="./dist/main.js"></script>
   </body>
