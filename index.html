@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <title>Boids TypeScript</title>
     <link rel="stylesheet" href="./style/stylesheet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
   </head>
   <body>
     <!-- Le canvas pour dessiner les boids -->
@@ -33,21 +37,57 @@
 
       <label class="slider-label">
         Portée visuelle :
-        <input id="rangeSlider" type="range" min="10" max="300" step="5" value="75"/>
+        <input id="rangeSlider" type="range" min="20" max="600" step="5" value="75"/>
       </label>
-
-      <div class="checkbox-label">
-        <input id="trailCheckbox" type="checkbox"/>
-        <label for="trailCheckbox">&nbsp; Afficher la traînée</label>
-      </div>
 
       <label class="slider-label">
-        Longueur de la traînée :
-        <input id="trailLengthSlider" type="range" min="5" max="500" step="5" value="50"/>
+        Virage :
+        <input id="turnSlider" type="range" min="1" max="10" step="1" value="1"/>
       </label>
 
-      <button id="resetBtn">RESET</button>
+      <label class="slider-label">
+        Vitesse :
+        <input id="speedSlider" type="range" min="5" max="30" step="1" value="15"/>
+      </label>
+
+      <label class="slider-label">
+        Vitesse du prédateur :
+        <input id="predatorSpeedSlider" type="range" min="5" max="30" step="1" value="15" />
+      </label>
+
+      <label class="slider-label">
+        Agressivité du prédateur :
+        <input id="predatorChaseFactorSlider" type="range" min="0" max="0.4" step="0.01" value="0.02" />
+      </label>
+
+      <div>
+        <input id="trailCheckbox" type="checkbox"/>
+        <label for="trailCheckbox">&nbsp; Afficher la traînée</label>
+
+        <label class="slider-label sliderLength ">
+            Longueur de la traînée :
+            <input id="trailLengthSlider" type="range" min="5" max="500" step="5" value="50"/>
+        </label>
+      </div>
+
+      <button id="resetBtn" class="btn">RESET</button>
+      <button id="modeDefaultBtn" class="btn">Mode par défaut</button>
+      <button id="modePredatorBtn" class="btn">Mode Prédateur</button>
+      <button id="modeFollowMouseBtn" class="btn">Mode Magnétique</button>
     </div>
+
+    <div id="viewport">
+        <div class="img" id="img-0"></div>   
+        <div class="img" id="img-1"></div>
+        <div class="img" id="img-2"></div>
+        <div class="img" id="img-3"></div>
+        <div class="img" id="img-4"></div>
+        <div class="img" id="img-5"></div>  
+        <div class="img" id="img-6"></div> 
+        <div class="img" id="img-7"></div> 
+        <div class="img" id="img-8"></div>
+        <div class="img" id="img-9"></div>
+      </div>
 
     <!-- Charge le code TypeScript compilé -->
     <script type="module" src="./dist/main.js"></script>

@@ -1,8 +1,60 @@
+:root {
+    --slider-height: 100%;
+    --slider-height: 10px;
+  }
+
+/* Corps de la page : un léger dégradé pour donner une teinte nocturne */
 body {
     margin: 0;
-    background: #282c34;
-    overflow: hidden;
-    font-family: sans-serif;
+    padding: 0;
+    background: linear-gradient(#1A2735, #090A0F 90%);
+    overflow: hidden; 
+    position: relative; /* Permet d'utiliser des pseudo-éléments en fond */
+    color: #fff; /* Si tu veux du texte en blanc par-dessus */
+    min-height: 100vh; /* S’assure que le body occupe tout l’écran */
+    font-family: 'Inter';
+  }
+  
+  /* Deux pseudo-éléments :
+     - ::before : des étoiles fixes
+     - ::after : un calque qui “scintille” lentement
+  */
+  body::before,
+  body::after {
+    content: "";
+    position: fixed; 
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0; /* Derrière tout le reste */
+    pointer-events: none; /* Inutile d'interagir */
+    display: block;
+  }
+  
+  body::before {
+    /* en plus du motif d’étoiles existant si tu veux */
+    background: 
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 200, 0.2), transparent 70%),
+      url('star.png') repeat top center;
+  }
+  
+  
+  /* Calque “twinkling” (qui se déplace très doucement) */
+  body::after {
+    background: url('https://i.imgur.com/YKY28eT.png') repeat top center;
+    opacity: 0.5;
+    animation: moveTwink 200s linear infinite;
+  }
+  
+  /* Animation qui déplace lentement la couche “twinkling”
+     pour donner un léger effet de scintillement/défilement */
+  @keyframes moveTwink {
+    from { background-position: 0 0; }
+    to   { background-position: -10000px 5000px; }
+  }
+  
+  #boids {
+    position: relative;
+    z-index: 10;
+    display: block;
   }
 
   /* Le bouton hamburger en haut à gauche */
@@ -23,15 +75,16 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 220px;
+    width: 230px;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     color: white;
-    transform: translateX(-220px); /* caché à gauche */
+    transform: translateX(-230px); /* caché à gauche */
     transition: transform 0.3s ease;
     padding: 20px;
     box-sizing: border-box;
     z-index: 998; /* en dessous du hamburger pour le reclic */
+    overflow-y: auto;
   }
 
   /* Classe "open" pour afficher la sidebar */
@@ -45,27 +98,42 @@ body {
 
   .slider-label {
     display: block;
+    font-size: 13px;
     margin-bottom: 8px;
   }
 
   .slider-label input {
+    margin-bottom: 12px;
     width: 100%;
   }
 
-  .checkbox-label {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-  }
-
-  #resetBtn {
-    margin-top: 20px;
-    width: 100%;
-    padding: 8px;
+  .btn {
+    background-color: #4F42D8;
+    border: none;
+    border-radius: 20px;
+    color: #FFFFFF;
     cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 10%;
+    margin: 10px 0 10px 0;
+    padding: 15px 30px;
+    text-transform: uppercase;
+    width: 100%;
   }
 
-  /* Le canvas */
-  #boids {
+  .btn#resetBtn {
+    background-color: #8ab661;
+    margin: 25px 0 10px 0;
+  }
+
+  #trailCheckbox {
+    margin-bottom: 16px;
+  }
+
+  #trailCheckbox:checked ~ .sliderLength  {
     display: block;
+  }
+
+  .sliderLength  {
+    display: none;
   }

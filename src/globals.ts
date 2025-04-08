@@ -1,21 +1,36 @@
 // globals.ts
 import { Boid } from "./Boid.js";
+import { Predator } from "./Predator.js";
+import { SimulationMode } from "./types.js";
 
 class GlobalVarsClass {
+  // Variables "privées" modifiables via getters/setters
   private _width = 150;
   private _height = 150;
   private _visualRange = 75;
   private _cohesionFactor = 0.005;
   private _separationFactor = 0.05;
   private _alignmentFactor = 0.05;
+  private _turnFactor = 1;
   private _showTrail = false;
   private _trailLength = 50;
+  private _boidMaxSpeed = 15;
+  private _predatorMaxSpeed = 15;
+  private _predatorChaseFactor = 0.02;
+  private _mouseAttractFactor = 0.01;
+  public mode: SimulationMode = SimulationMode.Default;
 
-  // On stocke directement les boids ici
+  // Tableau global de boids
   public boids: Boid[] = [];
 
-  // --- GETTERS/SETTERS ---
+  // Tableau des prédateurs
+  public predators: Predator[] = [];
 
+  // Position de la souris
+  public mouseX = 0;
+  public mouseY = 0;
+
+  // ---- GETTERS/SETTERS ----
   get width(): number {
     return this._width;
   }
@@ -72,25 +87,65 @@ class GlobalVarsClass {
     this._trailLength = value;
   }
 
-  // --- MÉTHODES ---
+  get predatorMaxSpeed(): number {
+    return this._predatorMaxSpeed;
+  }
+  set predatorMaxSpeed(value: number) {
+    this._predatorMaxSpeed = value;
+  }
 
-  // Permet d'ajuster la taille du canvas
-  public setCanvasSize(w: number, h: number): void {
+  get predatorChaseFactor(): number {
+    return this._predatorChaseFactor;
+  }
+  set predatorChaseFactor(value: number) {
+    this._predatorChaseFactor = value;
+  }
+
+  get boidMaxSpeed(): number {
+    return this._boidMaxSpeed;
+  }
+  set boidMaxSpeed(value: number) {
+    this._boidMaxSpeed = value;
+  }
+
+  get mouseAttractFactor(): number {
+    return this._mouseAttractFactor;
+  }
+  set mouseAttractFactor(value: number) {
+    this._mouseAttractFactor = value;
+  }
+
+  get turnFactor(): number {
+    return this._turnFactor;
+  }
+  set turnFactor(value: number) {
+    this._turnFactor = value;
+  }
+
+
+  // ---- MÉTHODES ----
+  public setCanvasSize(w: number, h: number) {
     this._width = w;
     this._height = h;
   }
 
-  // Permet de tout remettre par défaut
   public reset(): void {
+    // Remet toutes les valeurs par défaut
     this._width = 150;
     this._height = 150;
     this._visualRange = 75;
     this._cohesionFactor = 0.005;
     this._separationFactor = 0.05;
     this._alignmentFactor = 0.05;
+    this._turnFactor = 1;
     this._showTrail = false;
     this._trailLength = 50;
-
+    this._boidMaxSpeed = 15;
+    this._predatorMaxSpeed = 15;
+    this._predatorChaseFactor = 0.02;
+    this._mouseAttractFactor = 0.01;
+    
+    // Vide et réinitialise le tableau de boids
     this.boids = [];
   }
 }
