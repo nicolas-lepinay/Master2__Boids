@@ -21,39 +21,6 @@ export class Boid {
     this.dy = dy;
   }
 
-  /**
-   * Méthode principale pour mettre à jour ce boid :
-   * - Applique successivement les règles (cohésion, etc.)
-   * - Met à jour la position
-   * - Gère l'historique
-   */
-  public update(allBoids: Boid[]): void {
-    this.flyTowardsCenter(allBoids);
-    this.avoidOthers(allBoids);
-    this.matchVelocity(allBoids);
-    this.limitSpeed();
-    this.keepWithinBounds();
-
-    if (GlobalVars.mode === SimulationMode.Predator) this.avoidPredators();
-    if (GlobalVars.mode === SimulationMode.FollowMouse) this.moveTowardsMouse();
-
-    // Mise à jour de la position
-    this.x += this.dx;
-    this.y += this.dy;
-
-    // Mémorise la position (pour la traînée)
-    this.history.push([this.x, this.y]);
-    this.history = this.history.slice(-GlobalVars.trailLength);
-  }
-
-  // --- Méthodes privées ---
-
-  protected distanceTo(other: Boid): number {
-    const dx = this.x - other.x;
-    const dy = this.y - other.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
   private flyTowardsCenter(allBoids: Boid[]): void {
     let centerX = 0;
     let centerY = 0;
@@ -118,6 +85,37 @@ export class Boid {
     }
   }
 
+  private avoidPredators(): void {
+    // On parcourt GlobalVars.predators
+    // et si un prédateur est trop proche, on s'en éloigne
+    for (const predator of GlobalVars.predators) {
+      const dist = this.distanceTo(predator);
+      const safeDistance = 80; // distance à laquelle on fuit
+      if (dist < safeDistance) {
+        // On s’éloigne proportionnellement
+        const fleeFactor = 0.05;
+        this.dx += (this.x - predator.x) * fleeFactor;
+        this.dy += (this.y - predator.y) * fleeFactor;
+      }
+    }
+  }
+
+  private moveTowardsMouse(): void {
+    const { mouseX, mouseY } = GlobalVars;
+    const dist = Math.hypot(mouseX - this.x, mouseY - this.y);
+  
+    if (dist < GlobalVars.visualRange) {
+      this.dx += (mouseX - this.x) * GlobalVars.mouseAttractFactor;
+      this.dy += (mouseY - this.y) * GlobalVars.mouseAttractFactor;
+    }
+  }
+
+  protected distanceTo(other: Boid): number {
+    const dx = this.x - other.x;
+    const dy = this.y - other.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
   protected limitSpeed(): void {
     const speed = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
     if (speed > GlobalVars.boidMaxSpeed) {
@@ -142,29 +140,32 @@ export class Boid {
     }
   }
 
-    private avoidPredators(): void {
-    // On parcourt GlobalVars.predators
-    // et si un prédateur est trop proche, on s'en éloigne
-    for (const predator of GlobalVars.predators) {
-      const dist = this.distanceTo(predator);
-      const safeDistance = 80; // distance à laquelle on fuit
-      if (dist < safeDistance) {
-        // On s’éloigne proportionnellement
-        const fleeFactor = 0.05;
-        this.dx += (this.x - predator.x) * fleeFactor;
-        this.dy += (this.y - predator.y) * fleeFactor;
-      }
-    }
+  protected recordHistory(): void {
+    this.history.push([this.x, this.y]);
+    this.history = this.history.slice(-GlobalVars.trailLength);
   }
 
-  private moveTowardsMouse(): void {
-    const { mouseX, mouseY } = GlobalVars;
-    const dist = Math.hypot(mouseX - this.x, mouseY - this.y);
-  
-    if (dist < GlobalVars.visualRange) {
-      this.dx += (mouseX - this.x) * GlobalVars.mouseAttractFactor;
-      this.dy += (mouseY - this.y) * GlobalVars.mouseAttractFactor;
+    /**
+   * Méthode principale pour mettre à jour ce boid :
+   * - Applique successivement les règles (cohésion, etc.)
+   * - Met à jour la position
+   * - Gère l'historique
+   */
+    public update(allBoids: Boid[]): void {
+        this.flyTowardsCenter(allBoids);
+        this.avoidOthers(allBoids);
+        this.matchVelocity(allBoids);
+        this.limitSpeed();
+        this.keepWithinBounds();
+    
+        if (GlobalVars.mode === SimulationMode.Predator) this.avoidPredators();
+        if (GlobalVars.mode === SimulationMode.FollowMouse) this.moveTowardsMouse();
+    
+        // Mise à jour de la position
+        this.x += this.dx;
+        this.y += this.dy;
+    
+        // Mémorise la position (pour la traînée)
+        if (GlobalVars.showTrail) this.recordHistory();
     }
-  }
-  
 }

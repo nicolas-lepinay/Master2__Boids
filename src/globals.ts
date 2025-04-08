@@ -18,6 +18,7 @@ class GlobalVarsClass {
   private _predatorMaxSpeed = 15;
   private _predatorChaseFactor = 0.02;
   private _mouseAttractFactor = 0.01;
+  private _killMode = true;
   public mode: SimulationMode = SimulationMode.Default;
 
   // Tableau global de boids
@@ -122,6 +123,13 @@ class GlobalVarsClass {
     this._turnFactor = value;
   }
 
+  get killMode(): boolean {
+    return this._killMode;
+  }
+  set killMode(value: boolean) {
+    this._killMode = value;
+  }
+
 
   // ---- MÉTHODES ----
   public setCanvasSize(w: number, h: number) {
@@ -138,12 +146,13 @@ class GlobalVarsClass {
     this._separationFactor = 0.05;
     this._alignmentFactor = 0.05;
     this._turnFactor = 1;
-    this._showTrail = false;
+    //this._showTrail = false;
     this._trailLength = 50;
     this._boidMaxSpeed = 15;
     this._predatorMaxSpeed = 15;
     this._predatorChaseFactor = 0.02;
     this._mouseAttractFactor = 0.01;
+    //this._killMode = true;
     
     // Vide et réinitialise le tableau de boids
     this.boids = [];

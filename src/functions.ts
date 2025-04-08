@@ -73,18 +73,18 @@ export function drawBoid(ctx: CanvasRenderingContext2D, boid: Boid): void {
  * - Puis on dessine.
  */
 export function animationLoop(): void {
-    // Mise à jour boids
+    // 1. Mise à jour boids
     for (const boid of GlobalVars.boids) {
       boid.update(GlobalVars.boids);
     }
   
-    // Mise à jour prédateurs
+    // 2. Mise à jour prédateurs
     for (const predator of GlobalVars.predators) {
       // Pour la cohérence, passons-lui aussi la liste de boids
       predator.update(GlobalVars.boids);
     }
   
-    // Dessin
+    // 3. Dessin
     const canvas = document.getElementById("boids") as HTMLCanvasElement;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");

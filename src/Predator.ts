@@ -1,5 +1,6 @@
 import { Boid } from "./Boid.js";
 import { GlobalVars } from "./globals.js";
+import { SimulationMode } from "./types.js";
 
 /**
  * Un prédateur est un boid qui cherche à se rapprocher
@@ -8,27 +9,6 @@ import { GlobalVars } from "./globals.js";
 export class Predator extends Boid {
   constructor(x: number, y: number, dx: number, dy: number) {
     super(x, y, dx, dy);
-  }
-
-  /**
-   * On surcharge la méthode update pour un comportement différent.
-   * Si tu veux, tu peux reprendre des méthodes boid, ou en ignorer certaines.
-   */
-  public override update(allBoids: Boid[]): void {
-    // Le prédateur va se rapprocher de la position moyenne des boids (ou du boid le plus proche) pour les chasser.
-    this.chaseBoids(allBoids);
-    this.limitSpeed();
-    this.keepWithinBounds();
-
-    // Mise à jour position
-    this.x += this.dx;
-    this.y += this.dy;
-
-    // Mise à jour historique (si on veut voir sa traînée)
-    if (GlobalVars.showTrail) {
-      this.history.push([this.x, this.y]);
-      this.history = this.history.slice(-GlobalVars.trailLength);
-    }
   }
 
   /**
@@ -68,10 +48,18 @@ export class Predator extends Boid {
        }
      }
      if (closest) {
-       // const chaseFactor = 0.02;
        this.dx += (closest.x - this.x) * GlobalVars.predatorChaseFactor;
        this.dy += (closest.y - this.y) * GlobalVars.predatorChaseFactor;
      }
+  }
+
+  // Le prédateur fait disparaître les boids touchés
+  private killBoid(): void {
+    const hitbox = 30;
+    GlobalVars.boids = GlobalVars.boids.filter(boid => {
+    const d = this.distanceTo(boid);
+        return d > hitbox;
+    });
   }
 
   protected override limitSpeed(): void {
@@ -81,4 +69,23 @@ export class Predator extends Boid {
       this.dy = (this.dy / speed) * GlobalVars.predatorMaxSpeed;
     }
   }
+
+   /**
+   * On surcharge la méthode update pour un comportement différent.
+   * Si tu veux, tu peux reprendre des méthodes boid, ou en ignorer certaines.
+   */
+    public override update(allBoids: Boid[]): void {
+        // Le prédateur va se rapprocher de la position moyenne des boids (ou du boid le plus proche) pour les chasser.
+        this.chaseBoids(allBoids);
+        this.limitSpeed();
+        this.keepWithinBounds();
+        this.killBoid();
+    
+        // Mise à jour position
+        this.x += this.dx;
+        this.y += this.dy;
+    
+        // Mise à jour historique (si on veut voir sa traînée)
+        if (GlobalVars.showTrail) this.recordHistory();
+    }
 }
